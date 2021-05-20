@@ -1,0 +1,4 @@
+Set-PSSessionConfiguration -Name Microsoft.Powershell -ShowSecurityDescriptorUI "Benutzer" oder "Gruppe" hinzufügen.
+Set-Item WSMan:\localhost\Client\TrustedHosts -Value "HOST" um RDS Host zu vertrauen
+PSExec muss Administrator Rechte haben
+HKEY_CURRENT_USER/Control Panel/Desktop/AutoEndTasks.

@@ -1,2 +1,6 @@
-$users = qwinsta Administrator ;
-return = $users
+param(
+    [string]$user
+)
+
+$users = qwinsta $user ;
+return $users;
