@@ -7,7 +7,6 @@ param(
 )
 Write-Host $Adminuser
 Write-Host $AdminPassword
-Start-Sleep -Seconds 2
 # Choose random user from "user.txt"
 $user = Get-Content user.txt | Sort-Object { get-random } | Select-Object -First 1
 $securePassword = ConvertTo-SecureString $AdminPassword -AsPlainText -force
@@ -23,10 +22,11 @@ do {
 while ($userexists.length -gt 0)
 Add-Content -Path inuse.txt -Value $user
 Write-Host $user
-#Starte RDP Session
-cmdkey /generic:TERMSRV/$RDShost /user:$user /pass:$Password
-mstsc /v:$RDShost
-Start-Sleep -Seconds 2
+#Starting RDP Session
+#DOMÄNE!!!
+cmdkey /generic:TERMSRV/$RDShost /user:RDS\$user /pass:$Password
+mstsc /w:800 /h:600 /v:$RDShost
+Start-Sleep -Seconds 6
 #RDP Session ID
 $users = Invoke-command $RDShost -credential $credential -scriptblock { c:\PSTest\SessionID.ps1 $user }
 $IDs = @() ;
@@ -40,6 +40,7 @@ for ($i = 1; $i -lt $users.Count; $i++) {
 $IDs
 Psexec.exe \\$RDShost -i $IDs -u $Adminuser -p $AdminPassword powershell "C:\PSTest\Bench.ps1"
 #Remove from inuse.txt list
-Start-Sleep 15
-(Get-Content inuse.txt).replace($user, '') | Set-Content inuse.txt
+Start-Sleep 8
+Set-Content -Path "inuse.txt" -Value (get-content -Path "inuse.txt" | Select-String -Pattern $user -NotMatch)
+
 
