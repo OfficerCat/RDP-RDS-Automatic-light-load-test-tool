@@ -26,7 +26,7 @@ Write-Host $user
 #DOMÄNE!!!
 cmdkey /generic:TERMSRV/$RDShost /user:RDS\$user /pass:$Password
 mstsc /w:800 /h:600 /v:$RDShost
-Start-Sleep -Seconds 6
+Start-Sleep -Seconds 10
 #RDP Session ID
 $users = Invoke-command $RDShost -credential $credential -scriptblock { c:\PSTest\SessionID.ps1 $user }
 $IDs = @() ;
@@ -38,9 +38,8 @@ for ($i = 1; $i -lt $users.Count; $i++) {
   $IDs += $tempID ;
 }
 $IDs
-Psexec.exe \\$RDShost -i $IDs -u $Adminuser -p $AdminPassword powershell "C:\PSTest\Bench.ps1"
+Psexec.exe \\$RDShost -i $IDs -u $user -p $Password powershell "C:\PSTest\Bench.ps1"
 #Remove from inuse.txt list
-Start-Sleep 8
+Psexec.exe \\$RDShost -i $IDs -u $user -p $Password powershell "shutdown /l /f"
+Start-Sleep -s 15
 Set-Content -Path "inuse.txt" -Value (get-content -Path "inuse.txt" | Select-String -Pattern $user -NotMatch)
-
-
