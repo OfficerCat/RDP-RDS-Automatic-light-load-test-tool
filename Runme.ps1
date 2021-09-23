@@ -30,13 +30,13 @@ do {
             Start-Process -windowstyle hidden -Filepath powershell.exe -WorkingDirectory C:\Users\Administrator\Desktop\RDSScript -ArgumentList "C:\Users\Administrator\Desktop\RDSScript\Sessionscript.ps1 -Adminuser $Adminuser -Adminpassword $Adminpassword -RDShost $RDShost -Password $Password"
             $Check = Get-WmiObject Win32_Process -Filter "Name='powershell.exe' AND CommandLine LIKE '%Sessionscript.ps1%'"
             $temp = $Check | Select-String  -Pattern "Win32"
-            Start-Sleep 2
+            Start-Sleep 1
             $CPUUsageRDS = Invoke-command $RDShost -credential $credential -scriptblock {Get-WmiObject Win32_Processor | Select-Object LoadPercentage | Format-List | Out-String }           
             clear
             Write-Host "RDS Host CPU Usage: $CPUUsageRDS"
             Write-Host "Client CPU Usage $CPUUsageClient"
             Write-Host "Cooldown 2 seconds"
-            Start-Sleep 2
+            Start-Sleep 1
             
         } while ($temp.count -lt $Sessioncount) 
     }
@@ -47,7 +47,7 @@ do {
         Write-Host "RDS Host CPU Usage: $CPUUsageRDS"
         Write-Host "Client CPU Usage $CPUUsageClient"
         Write-Host "Max Sessions reached, waiting"
-        Start-Sleep 2       
+        Start-Sleep 1       
     }
     
 } while ($continue -eq "true")

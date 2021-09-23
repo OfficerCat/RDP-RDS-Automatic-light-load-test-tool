@@ -1,4 +1,18 @@
-Set-PSSessionConfiguration -Name Microsoft.Powershell -ShowSecurityDescriptorUI "Benutzer" oder "Gruppe" hinzufügen.
-Set-Item WSMan:\localhost\Client\TrustedHosts -Value "HOST" um RDS Host zu vertrauen
-PSExec muss Administrator Rechte haben
-HKEY_CURRENT_USER/Control Panel/Desktop/AutoEndTasks.
+Every user needs Administrator privileges
+user.txt needs atleast 2 Usersnames formated like this 
+
+User1
+User2
+User3
+
+Password for all users should be the same.
+
+For Windows Server 2019 and lower you need to remove internet explorer .. its just too old 
+"dism /online /Disable-Feature /FeatureName:Internet-Explorer-Optional-amd64"
+
+High load leads to long login and logout times, you might see some error messages about being forcefully disconnected by a diffrent client on your RDP Client Machine 
+Having a check for high load leads to lower then configured RDP Sessions.
+
+RDP Client host should have atleast 1 Core per 5 Users and 200 MB Ram per Session
+
+Set-Item WSMan:\localhost\Client\TrustedHosts -Value "HOST" to trust the remote host on both Maschines
